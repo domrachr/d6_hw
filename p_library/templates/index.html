@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+
+        <h1>Добро пожаловать в {{ title }} <br>
+            Тут собрано {{ books|length }} книг из моей личной коллекции</h1>
+
+        <table class="table" border="1">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Название книги</th>
+                    <th scope="col">Обложка</th>
+                    <th scope="col">ISBN</th>
+                    <th scope="col">Издательство</th>
+                    <th scope="col">Описание</th>
+                    <th scope="col">Год издания</th>
+                    <th scope="col">Автор</th>
+                    <th scope="col">Страна</th>
+                    <th scope="col">Количество</th>
+                    <th scope="col">Операции</th>
+                    <th scope="col">Дал почитать</th>
+                </tr>
+            </thead>
+            {% for book in books %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td><img src='{{ book.cover.url }}' height="200"></td>
+                <td>{{ book.ISBN }}</td>
+                <td>{{ book.publisher }}</td>
+                <td>{{ book.description }}</td>
+                <td>{{ book.year_release }}</td>
+                <td>{{ book.author.full_name }}</td>
+                <td>{{ book.author.country }}</td>
+                <td>{{ book.copy_count }}</td>
+                <td>
+                    <form action="/index/book_increment/" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{book.id}}" />
+                        <button type="submit" class="btn btn-outline-success btn-sm btn-block">+</button>
+                    </form>
+                    <form action="/index/book_decrement/" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{book.id}}" />
+                        <button type="submit" class="btn btn-outline-danger btn-sm btn-block">-</button>
+                    </form>
+                </td>                
+                <td>
+                    {% for reader in book.readers.all %}
+                        {{ reader.full_name }} <br>
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+{% endblock %}

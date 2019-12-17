@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Список друзей-читателей (кому какие книги давал)</h1>
+<div class="accordion" id="accordionExample">
+    {% for reader in readers %}
+    <div class="card">
+        <div class="card-header" id="heading{{ reader.reader.id }}">
+            <h2 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse"
+                    data-target="#collapse{{ reader.reader.id }}" aria-expanded="true"
+                    aria-controls="collapse{{ reader.reader.id }}">
+                    {{ reader.reader.full_name }} {{ reader.reader.phone_number }} (Книг на руках: {{ reader.books|length}})
+                </button>
+            </h2>
+        </div>
+        <div id="collapse{{ reader.reader.id }}" class="collapse" aria-labelledby="heading{{ reader.reader.id }}"
+            data-parent="#accordionExample">
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for book in reader.books %}
+                    <li class="list-group-item">{{ book.title }} <img src='{{ book.cover.url }}' height="200"></td></li>
+                    {% empty %}
+                    <li class="list-group-item">Нет книг у этого читателя</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

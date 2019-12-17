@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Список издательств</h1>
+<div class="accordion" id="accordionExample">
+    {% for redaction in redactions %}
+    <div class="card">
+        <div class="card-header" id="heading{{ redaction.publisher.id }}">
+            <h2 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse"
+                    data-target="#collapse{{ redaction.publisher.id }}" aria-expanded="true"
+                    aria-controls="collapse{{ redaction.publisher.id }}">
+                    {{ redaction.publisher.short_name }} Количество книг: {{ redaction.books|length}}
+                </button>
+            </h2>
+        </div>
+        <div id="collapse{{ redaction.publisher.id }}" class="collapse"
+            aria-labelledby="heading{{ redaction.publisher.id }}" data-parent="#accordionExample">
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for book in redaction.books %}
+                    <li class="list-group-item">{{ book.title }}</li>
+                    {% empty %}
+                    <li class="list-group-item">Нет книг этого издательства</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% endblock %}
